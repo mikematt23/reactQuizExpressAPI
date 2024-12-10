@@ -2,14 +2,18 @@ const express = require('express')
 const path = require('path')
 const app = express()
 const cors = require('cors')
+const userRoutes = require("./routes/usersRoutes")
 
 let port = process.env.PORT
-app.use(express.json())
+
+
 app.use(cors())
+app.use(express.json())
 
 app.get('/',function(req,res){
     res.sendFile(path.join(__dirname,'/index.html'))
   })
+app.use(userRoutes)
 
 
 app.listen(port || 3000)
