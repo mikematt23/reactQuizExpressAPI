@@ -26,6 +26,9 @@ router.post("/addUser",async (req,res)=>{
 router.post("/userLogin",async(req,res)=>{
    const email = req.body.email
    const password = req.body.password
+
+   console.log(email)
+   console.log(password)
   
    const query = `SELECT * FROM users WHERE email = "${email}"`
    const [user,userFeilds] = await db.query(query)
