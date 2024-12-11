@@ -29,6 +29,7 @@ router.post("/userLogin",async(req,res)=>{
   
    const query = `SELECT * FROM users WHERE email = "${email}"`
    const [user,userFeilds] = await db.query(query)
+   console.log(user)
    
    bcrypt.compare(password,user[0].password,(err,result)=>{
     if(err){
