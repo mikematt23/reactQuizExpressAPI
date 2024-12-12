@@ -10,7 +10,7 @@ router.post("/addUser",async (req,res)=>{
    const query1 = `SELECT * FROM users WHERE email = "${email}"`
    const [user,userFeilds] = await db.query(query1)
    console.log(user)
-   if(user[0] === null){
+   if(user[0].legnth === 0){
     bcrypt.hash(password,3,async (err, hash)=>{
       let hashedPassword = hash
       if(err){
