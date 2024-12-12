@@ -9,22 +9,20 @@ router.post("/addUser",async (req,res)=>{
    let password = req.body.password
    const query1 = `SELECT * FROM users WHERE email = "${email}"`
    const [user,userFeilds] = await db.query(query1)
-   console.log(user, user != undefined)
-   if(user[0].email != undefined){
-    return res.json({message: "already a user"})
+   if(user[0].email === undefined){
+    bcrypt.hash(password,3,async (err, hash)=>{
+      let hashedPassword = hash
+      if(err){
+        return err
+      }
+      let query2 = `INSERT INTO users(email,password, score)
+       VALUES("${email}","${hashedPassword}",${0})
+      `
+      await db.query(query2)
+      return res.json({message:"user added", user: {email:user[0].email, score:user[0].score}})
+    })
    }
-
-   bcrypt.hash(password,3,async (err, hash)=>{
-     let hashedPassword = hash
-     if(err){
-       return err
-     }
-     let query2 = `INSERT INTO users(email,password, score)
-      VALUES("${email}","${hashedPassword}",${0})
-     `
-     await db.query(query2)
-     return res.json({message:"user added", user: {email:user[0].email, score:user[0].score}})
-   })
+   return res.json({message: "already a user"})
 })
 
 router.post("/userLogin",async(req,res)=>{
