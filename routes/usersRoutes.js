@@ -14,7 +14,7 @@ router.post("/addUser",async (req,res)=>{
      }
      const query1 = `SELECT * FROM users WHERE email = "${email}"`
      const [user,userFeilds] = await db.query(query1)
-     if(user.email === undefined){
+     if(user.email != undefined){
       return res.json({message: "already a user"})
      }
      let query2 = `INSERT INTO users(email,password, score)
