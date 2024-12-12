@@ -20,7 +20,7 @@ router.post("/addUser",async (req,res)=>{
        VALUES("${email}","${hashedPassword}",${0})
       `
       await db.query(query2)
-      return res.json({message:"user added", user: {email:user[0].email, score:user[0].score}})
+      return res.json({message:"user added", user: {email:email, score:0}})
     })
    }
    return res.json({message: "already a user"})
