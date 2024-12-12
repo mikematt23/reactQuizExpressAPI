@@ -22,8 +22,9 @@ router.post("/addUser",async (req,res)=>{
       await db.query(query2)
       return res.json({message:"user added", user: {email:email, score:0}})
     })
+   }else{
+    return res.json({message: "already a user"})
    }
-   return res.json({message: "already a user"})
 })
 
 router.post("/userLogin",async(req,res)=>{
