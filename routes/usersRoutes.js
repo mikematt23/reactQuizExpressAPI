@@ -7,15 +7,17 @@ const db = require("../Data/database")
 router.post("/addUser",async (req,res)=>{
    const email = req.body.email
    let password = req.body.password
+   const query1 = `SELECT * FROM users WHERE email = "${email}"`
+   const [user,userFeilds] = await db.query(query1)
+   console.log(user, user != undefined)
+   if(user.email != undefined){
+    return res.json({message: "already a user"})
+   }
+
    bcrypt.hash(password,3,async (err, hash)=>{
      let hashedPassword = hash
      if(err){
        return err
-     }
-     const query1 = `SELECT * FROM users WHERE email = "${email}"`
-     const [user,userFeilds] = await db.query(query1)
-     if(user.email != undefined){
-      return res.json({message: "already a user"})
      }
      let query2 = `INSERT INTO users(email,password, score)
       VALUES("${email}","${hashedPassword}",${0})
