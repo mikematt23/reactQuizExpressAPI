@@ -7,21 +7,20 @@ const db = require("../Data/database")
 router.post("/addUser",async (req,res)=>{
    const email = req.body.email
    let password = req.body.password
-
-   
    bcrypt.hash(password,3,async (err, hash)=>{
      let hashedPassword = hash
      if(err){
        return err
      }
-     let query = `INSERT INTO users(email,password, score)
+     const query1 = `SELECT * FROM users WHERE email = "${email}"`
+     const [user,userFeilds] = await db.query(query1)
+     if(user.email === undefined){
+      return res.json({message: "already a user"})
+     }
+     let query2 = `INSERT INTO users(email,password, score)
       VALUES("${email}","${hashedPassword}",${0})
      `
-     await db.query(query)
-
-     const query2 = `SELECT * FROM users WHERE email = "${email}"`
-     const [user,userFeilds] = await db.query(query2)
-
+     await db.query(query2)
      return res.json({message:"user added", user: {email:user[0].email, score:user[0].score}})
    })
 })
@@ -29,14 +28,11 @@ router.post("/addUser",async (req,res)=>{
 router.post("/userLogin",async(req,res)=>{
    const email = req.body.email
    const password = req.body.password
-
    const query = `SELECT * FROM users WHERE email = "${email}"`
    const [user,userFeilds] = await db.query(query)
-
    if(user === undefined){
     return res.json({message:"No User"})
    }
-
    bcrypt.compare(password,user[0].password,(err,result)=>{
     if(err){
         return err
@@ -52,7 +48,6 @@ router.post("/userLogin",async(req,res)=>{
 router.put("/updateUserScore",async (req,res)=>{
   const email = req.body.email
   const score = req.body.score
-
   const query = `
     UPDATE users 
     SET score = ${score} 
