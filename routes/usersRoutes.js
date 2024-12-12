@@ -22,7 +22,7 @@ router.post("/addUser",async (req,res)=>{
      const query2 = `SELECT * FROM users WHERE email = "${email}"`
      const [user,userFeilds] = await db.query(query2)
 
-     return res.json({message:"user added", user:user[0]})
+     return res.json({message:"user added", user: {email:user[0].email, score:user[0].score}})
    })
 })
 
@@ -42,7 +42,7 @@ router.post("/userLogin",async(req,res)=>{
         return err
     }
     if(result){
-        return res.json({user:user[0]})
+        return res.json({user: {email:user[0].email, score:user[0].score}})
     }else{
         return res.json({message:"Wrong Password"})
     }
