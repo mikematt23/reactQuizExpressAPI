@@ -30,7 +30,7 @@ router.post("/userLogin",async(req,res)=>{
    const password = req.body.password
    const query = `SELECT * FROM users WHERE email = "${email}"`
    const [user,userFeilds] = await db.query(query)
-   if(user === undefined){
+   if(user.email === undefined){
     return res.json({message:"No User"})
    }
    bcrypt.compare(password,user[0].password,(err,result)=>{
